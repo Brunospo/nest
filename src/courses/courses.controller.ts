@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Post,
+  Res,
+} from '@nestjs/common';
 
 @Controller('courses')
 export class CoursesController {
@@ -8,13 +17,13 @@ export class CoursesController {
   }
 
   // Assim captura uma lista de parametros
-  @Get(':id')
+  @Get('g1/:id')
   findOne1(@Param() params) {
     return `Curso ${params.id}`;
   }
 
   // Assim captura um parametro especifico
-  @Get(':id')
+  @Get('g2/:id')
   findOne2(@Param('id') id: string) {
     return `Curso ${id}`;
   }
@@ -26,8 +35,21 @@ export class CoursesController {
   }
 
   // Capturando uma informação especifica
-  @Post('/c')
+  @Post('/p')
   create2(@Body('title') a) {
     return a;
+  }
+
+  // Retornando um statusCode diferente
+  @Post('/p2')
+  @HttpCode(HttpStatus.NO_CONTENT) //ou @HttpCode(204)
+  create3(@Body('title') a) {
+    return a;
+  }
+
+  // Quando temos que retornar um statusCode após um tratamento de erros (por exemplo)
+  @Get('/teste')
+  teste(@Res() response) {
+    return response.status(200).send('teste');
   }
 }
